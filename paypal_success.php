@@ -2,21 +2,19 @@
 session_start();
 include("Database/connect.php");
 
-// Basic validation
-if (!isset($_GET['tx'])) {
-    echo "Invalid payment access!";
-    exit();
-}
-
 // Update booking status
 if (isset($_SESSION['booking_ids'])) {
     foreach ($_SESSION['booking_ids'] as $id) {
         mysqli_query(
             $con,
-            "UPDATE booking SET payment_status='completed' WHERE id='$id'"
+            "UPDATE booking 
+             SET payment_status='completed' 
+             WHERE id='$id'"
         );
     }
 }
+
+
 
 // Clear cart
 mysqli_query($con, "DELETE FROM temp");
