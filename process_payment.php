@@ -1,115 +1,81 @@
 <?php
-// process_payment.php - WORKING VERSION
 session_start();
 require_once('paypal_config.php');
 
-// Debug info
-if (PAYPAL_DEBUG) {
-    echo "<pre>";
-    echo "Session Data:\n";
-    print_r($_SESSION);
-    echo "</pre>";
-}
-
-// Check if we have booking data
-if (!isset($_SESSION['booking_ids']) || empty($_SESSION['booking_ids'])) {
-    echo "<script>alert('Session expired. Please start over.'); window.location='booking.php';</script>";
+// Validate booking session
+if (
+    !isset($_SESSION['booking_ids']) ||
+    empty($_SESSION['booking_ids']) ||
+    !isset($_SESSION['booking_info'])
+) {
+    header("Location: booking.php");
     exit();
 }
 
-// Calculate amount - use a small amount for testing
-$total_price = $_SESSION['booking_info']['total_price'] ?? 0;
-$test_amount = 1.00; // Use $1 for testing
-// $test_amount = number_format($total_price / 75, 2); // Real calculation
+// Get total price and convert to USD (example rate)
+$total_price_npr = $_SESSION['booking_info']['total_price'];
+$exchange_rate   = 75; // NPR → USD (adjust if needed)
+$amount_usd      = number_format($total_price_npr / $exchange_rate, 2);
 
-// Create invoice
-$invoice = 'INV-' . time() . '-' . rand(100, 999);
-
-// Store in session
+// Generate unique invoice
+$invoice = 'INV-' . time() . '-' . rand(1000, 9999);
 $_SESSION['paypal_invoice'] = $invoice;
+
+// Custom data for IPN
+$custom_data = base64_encode(json_encode([
+    'booking_ids' => $_SESSION['booking_ids'],
+    'user_id'     => $_SESSION['user_id'] ?? 0
+]));
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Processing Payment...</title>
+    <title>Redirecting to PayPal</title>
     <style>
-        body { font-family: Arial; text-align: center; padding: 50px; }
-        .info-box {
+        body {
+            font-family: Arial, sans-serif;
             background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px auto;
-            max-width: 500px;
-            text-align: left;
+            text-align: center;
+            padding-top: 80px;
+        }
+        .payment-box {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 450px;
+            margin: auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
     </style>
 </head>
 <body>
-    <h2>Processing Payment</h2>
-    
-    <div class="info-box">
-        <h3>Payment Details:</h3>
-        <p><strong>Amount:</strong> $<?php echo $test_amount; ?> USD</p>
-        <p><strong>Invoice:</strong> <?php echo $invoice; ?></p>
-        <p><strong>Description:</strong> Theme Booking</p>
-    </div>
-    
-    <!-- PayPal Form -->
+
+<div class="payment-box">
+    <h2>Processing Secure Payment</h2>
+    <p><strong>Amount:</strong> $<?php echo $amount_usd; ?> USD</p>
+    <p><strong>Invoice:</strong> <?php echo $invoice; ?></p>
+    <p>Please wait, you are being redirected to PayPal.</p>
+
     <form id="paypalForm" action="<?php echo PAYPAL_URL; ?>" method="post">
-        <!-- Required Parameters -->
         <input type="hidden" name="cmd" value="_xclick">
         <input type="hidden" name="business" value="<?php echo PAYPAL_BUSINESS_EMAIL; ?>">
-        
-        <!-- Item Details -->
-        <input type="hidden" name="item_name" value="Theme Booking">
+        <input type="hidden" name="item_name" value="Event Theme Booking">
         <input type="hidden" name="item_number" value="<?php echo $invoice; ?>">
-        <input type="hidden" name="amount" value="<?php echo $test_amount; ?>">
+        <input type="hidden" name="amount" value="<?php echo $amount_usd; ?>">
         <input type="hidden" name="currency_code" value="<?php echo PAYPAL_CURRENCY; ?>">
-        
-        <!-- Return URLs -->
-        <input type="hidden" name="return" value="<?php echo PAYPAL_RETURN_URL . '?invoice=' . $invoice; ?>">
-        <input type="hidden" name="cancel_return" value="<?php echo PAYPAL_CANCEL_URL . '?invoice=' . $invoice; ?>">
+        <input type="hidden" name="return" value="<?php echo PAYPAL_RETURN_URL; ?>">
+        <input type="hidden" name="cancel_return" value="<?php echo PAYPAL_CANCEL_URL; ?>">
         <input type="hidden" name="notify_url" value="<?php echo PAYPAL_NOTIFY_URL; ?>">
-        
-        <!-- Additional Settings -->
+        <input type="hidden" name="custom" value="<?php echo $custom_data; ?>">
         <input type="hidden" name="no_shipping" value="1">
         <input type="hidden" name="no_note" value="1">
-        <input type="hidden" name="lc" value="US">
-        <input type="hidden" name="bn" value="PP-BuyNowBF">
-        <input type="hidden" name="custom" value="<?php echo base64_encode(json_encode([
-            'booking_ids' => $_SESSION['booking_ids'],
-            'user_id' => $_SESSION['user_id'] ?? 0
-        ])); ?>">
-        
-        <!-- Shipping (not needed for digital) -->
-        <input type="hidden" name="shipping" value="0">
-        <input type="hidden" name="shipping2" value="0">
-        <input type="hidden" name="handling" value="0">
-        <input type="hidden" name="tax" value="0">
-        
-        <!-- Button -->
-        <p>
-            <button type="submit" style="
-                background: #0070ba;
-                color: white;
-                border: none;
-                padding: 15px 40px;
-                font-size: 18px;
-                border-radius: 5px;
-                cursor: pointer;
-            ">
-                Pay with PayPal - $<?php echo $test_amount; ?> USD
-            </button>
-        </p>
     </form>
-    
-    <p><em>You will be redirected to PayPal's secure payment page.</em></p>
-    
-    <script>
-        // Auto-submit after 2 seconds
-        setTimeout(function() {
-            document.getElementById('paypalForm').submit();
-        }, 2000);
-    </script>
+</div>
+
+<script>
+    // Auto-submit PayPal form
+    document.getElementById('paypalForm').submit();
+</script>
+
 </body>
 </html>

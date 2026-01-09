@@ -1,100 +1,100 @@
 <?php
 include('Database/connect.php');
-include('session.php');		
-include("header.php");
-include("paypal_config.php");
+include('session.php');
+include('paypal_config.php');
 
+// Fetch selected themes from temporary cart
+$result = mysqli_query($con, "SELECT * FROM temp");
 
-
-// Enable error reporting
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-// Get theme details from temp table
-$q = mysqli_query($con, "SELECT * FROM temp");
-$id = "";
-$image = "";
-$name = "";
-$price = "";
-$total_price = 0;
-
-if(mysqli_num_rows($q) == 0) {
-    echo "<script>alert('Your cart is empty!');</script>";
-    echo "<script>window.location='gallery.php';</script>";
+if (mysqli_num_rows($result) === 0) {
+    header("Location: gallery.php");
     exit();
 }
 
 $theme_items = [];
-while($f = mysqli_fetch_assoc($q)) {
-    $theme_items[] = $f;
-    $total_price += $f['price'];
+$total_price = 0;
+
+while ($row = mysqli_fetch_assoc($result)) {
+    $theme_items[] = $row;
+    $total_price += $row['price'];
 }
 
-// Handle form submission
-if(isset($_POST['submit'])) {
-    // Get and sanitize form data
-    $customer_name = mysqli_real_escape_string($con, $_POST['nm']);
-    $customer_email = mysqli_real_escape_string($con, $_POST['email']);
+// Handle booking submission
+if (isset($_POST['submit'])) {
+
+    $customer_name   = mysqli_real_escape_string($con, $_POST['nm']);
+    $customer_email  = mysqli_real_escape_string($con, $_POST['email']);
     $customer_mobile = mysqli_real_escape_string($con, $_POST['mo']);
-    $booking_date = mysqli_real_escape_string($con, $_POST['date']);
-    
-    // Get user ID from session if available
-    $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
-    
-    // Check for double booking
-    $all_available = true;
+    $booking_date    = mysqli_real_escape_string($con, $_POST['date']);
+
     $unavailable_themes = [];
-    
-    foreach($theme_items as $item) {
-        $check_booking = mysqli_query($con, "SELECT * FROM booking WHERE thm_nm='{$item['nm']}' AND date='$booking_date' AND payment_status='completed'");
-        
-        if(mysqli_num_rows($check_booking) > 0) {
-            $all_available = false;
+
+    // Check availability for each theme
+    foreach ($theme_items as $item) {
+        $check = mysqli_query(
+            $con,
+            "SELECT id FROM booking 
+             WHERE thm_nm = '{$item['nm']}'
+             AND date = '{$booking_date}'
+             AND payment_status = 'completed'"
+        );
+
+        if (mysqli_num_rows($check) > 0) {
             $unavailable_themes[] = $item['nm'];
         }
     }
-    
-    if(!$all_available) {
-        $theme_list = implode(", ", $unavailable_themes);
-        echo "<script>alert('Sorry! These themes are already booked for $booking_date: $theme_list. Please choose another date.');</script>";
+
+    if (!empty($unavailable_themes)) {
+        $themes = implode(", ", $unavailable_themes);
+        echo "<script>alert('The following themes are already booked on $booking_date: $themes');</script>";
     } else {
-        // Create booking record
-        foreach($theme_items as $item) {
-            $theme_image = $item['img'];
-            $theme_name = $item['nm'];
-            $theme_price = $item['price'];
-            
-            $q1 = mysqli_query($con, "INSERT INTO booking(nm, email, mo, theme, thm_nm, price, date, payment_status) 
-                                     VALUES('$customer_name', '$customer_email', '$customer_mobile', '$theme_image', '$theme_name', '$theme_price', '$booking_date', 'pending')");
-            
-            if($q1) {
-                $booking_id = mysqli_insert_id($con);
-                
-                // Store booking ID in session for PayPal processing
-                if(!isset($_SESSION['booking_ids'])) {
-                    $_SESSION['booking_ids'] = [];
-                }
-                $_SESSION['booking_ids'][] = $booking_id;
-                
-                // Store booking info in session
-                $_SESSION['booking_info'] = [
-                    'customer_name' => $customer_name,
-                    'customer_email' => $customer_email,
-                    'booking_date' => $booking_date,
-                    'total_price' => $total_price
-                ];
-            }
+
+        // Initialize session array safely
+        if (!isset($_SESSION['booking_ids'])) {
+            $_SESSION['booking_ids'] = [];
         }
-        
-        // Redirect to PayPal payment
-        echo "<script>window.location='process_payment.php';</script>";
+
+        // Insert booking records
+        foreach ($theme_items as $item) {
+            mysqli_query(
+                $con,
+                "INSERT INTO booking (nm, email, mo, theme, thm_nm, price, date, payment_status)
+                 VALUES (
+                    '$customer_name',
+                    '$customer_email',
+                    '$customer_mobile',
+                    '{$item['img']}',
+                    '{$item['nm']}',
+                    '{$item['price']}',
+                    '$booking_date',
+                    'pending'
+                 )"
+            );
+
+            $_SESSION['booking_ids'][] = mysqli_insert_id($con);
+        }
+
+        // Store PayPal session data
+        $_SESSION['booking_info'] = [
+            'customer_name'  => $customer_name,
+            'customer_email' => $customer_email,
+            'booking_date'   => $booking_date,
+            'total_price'    => $total_price
+        ];
+
+        header("Location: process_payment.php");
         exit();
     }
 }
 
-// Get first theme for display
+// Display first theme
 $first_theme = $theme_items[0];
+
+// ✅ Include header AFTER all PHP logic
+include("header.php");
 ?>
+
+
 
 <!DOCTYPE html>
 <html>
