@@ -4,6 +4,8 @@ include('session.php');
 include("header.php");
 include("paypal_config.php");
 
+
+
 // Enable error reporting
 error_reporting(E_ALL);
 ini_set('display_errors', 1);

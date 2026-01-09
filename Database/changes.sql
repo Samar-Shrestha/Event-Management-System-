@@ -23,3 +23,14 @@ CREATE TABLE payments (
 );
 
 
+ALTER TABLE `booking` 
+ADD COLUMN `payer_email` VARCHAR(150) NULL AFTER `amount_paid`,
+ADD COLUMN `payer_id` VARCHAR(100) NULL AFTER `payer_email`;
+
+
+DELIMITER $$
+CREATE PROCEDURE clean_old_pending_bookings()
+BEGIN
+    DELETE FROM booking WHERE payment_status = 'pending' AND created_at < DATE_SUB(NOW(), INTERVAL 24 HOUR);
+END$$
+DELIMITER ;

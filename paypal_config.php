@@ -1,23 +1,10 @@
 <?php
-// PayPal Configuration for Sandbox (Testing)
-define('PAYPAL_SANDBOX', true); // Set to false for production
+define("PAYPAL_URL", "https://www.sandbox.paypal.com/cgi-bin/webscr");
+define("PAYPAL_BUSINESS_EMAIL", "sb-647x0u48254548@business.example.com"); // sandbox business email
+define("PAYPAL_CURRENCY", "USD");
 
-if (PAYPAL_SANDBOX) {
-    // Sandbox Credentials
-    define('PAYPAL_CLIENT_ID', 'AUTEqz85GlH6AYb8GWYJv1zK-G_9POJLB4OlAczu5q1n8pUno-SoNJeEIaktws3IdbNFB3QxIGuJ9NYx');
-    define('PAYPAL_SECRET', 'ELMSIwe91tCSHvdOWFMDJ549oVMcDiFDQERaBEhaxb_KccsyJBbb_L2F6a_NDcvrR9b5P4oXyBHj92L9');
-    define('PAYPAL_BASE_URL', 'https://api.sandbox.paypal.com');
-    define('PAYPAL_RETURN_URL', 'http://127.0.0.1/classic_event/paypal_success.php');
-    define('PAYPAL_CANCEL_URL', 'http://127.0.0.1/classic_event/paypal_cancel.php');
-} else {
-    // Live Credentials
-    define('PAYPAL_CLIENT_ID', 'YOUR_LIVE_CLIENT_ID');
-    define('PAYPAL_SECRET', 'YOUR_LIVE_SECRET');
-    define('PAYPAL_BASE_URL', 'https://api.paypal.com');
-    define('PAYPAL_RETURN_URL', 'https://yourdomain.com/classic_event/paypal_success.php');
-    define('PAYPAL_CANCEL_URL', 'https://yourdomain.com/classic_event/paypal_cancel.php');
-}
-
-// Database configuration
-include('Database/connect.php');
+// Return URLs
+define("PAYPAL_RETURN_URL", "http://localhost/Event-Management-System/paypal_success.php");
+define("PAYPAL_CANCEL_URL", "http://localhost/Event-Management-System/paypal_cancel.php");
+define("PAYPAL_NOTIFY_URL", "http://localhost/Event-Management-System/ipn.php");
 ?>
