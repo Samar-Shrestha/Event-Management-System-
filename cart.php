@@ -51,9 +51,9 @@
 				$theme_name = $res[2];
 				$theme_price = $res[3];
 				
-			
-				//CHECK FOR DOUBLE BOOKING
-
+				// ========================================
+				// CRITICAL: CHECK FOR DOUBLE BOOKING
+				// ========================================
 				$check_booking = mysqli_query($con, "SELECT * FROM booking WHERE thm_nm='$theme_name' AND date='$booking_date'");
 				
 				if(!$check_booking)
@@ -107,147 +107,187 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-	
-	<script>
-	$(function()
-	{
-		$("#event_date").datepicker
-		({
-			changeMonth: true,
-			changeYear: true,
-			minDate: 0,  // Prevent past dates
-			dateFormat: 'yy-mm-dd'
-		});
-	});
-	</script>
+    <title>Book Event - Classic Event</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+        .payment-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #007bff;
+        }
+        .price-summary {
+            background: #e9f7ef;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #28a745;
+        }
+        .paypal-button {
+            background: #0070ba;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            margin: 20px 0;
+            width: 100%;
+        }
+        .paypal-button:hover {
+            background: #005ea6;
+        }
+    </style>
 </head>
 <body>
 
 <div class="codes">
-	<div class="container"> 
-		<h3 class='w3ls-hdg' align="center">BOOKING</h3>
-		<div class="grid_3 grid_4">
-			<div class="tab-content">
-				<div class="tab-pane active" id="horizontal-form">
-					<form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
-						
-						<div class="form-group">
-							<label for="focusedinput" class="col-sm-2 control-label">Name</label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control1" name="nm" pattern="[A-Za-z\s]{2,30}" title="Only Letter For Name" id="focusedinput" placeholder="Name" required="">
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label for="smallinput" class="col-sm-2 control-label label-input-sm">Email</label>
-							<div class="col-sm-8">
-								<input type="email" class="form-control1 input-sm" name="email" title="Enter Proper Email Id" id="smallinput" placeholder="Email" required="">
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label for="smallinput" class="col-sm-2 control-label label-input-sm">Mobile no</label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control1 input-sm" name="mo" id="smallinput" pattern="([7-9]{1})+([0-9]{9})" title="Only Number" maxlength="10" placeholder="Mobile no" required=""/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label for="focusedinput" class="col-sm-2 control-label">Your Theme :</label>
-							<div class="col-sm-8">
-								<?php if(isset($row[1])): ?>
-									<img src="./images/<?php echo $row[1]; ?>" height="200" width="300"/>
-								<?php endif; ?>
-							</div>		
-						</div>
-						
-						<div class="form-group">
-							<label for="disabledinput" class="col-sm-2 control-label">Theme Name :</label>
-							<div class="col-sm-8">
-								<input disabled="" type="text" class="form-control1" value="<?php echo isset($row[2]) ? $row[2] : ''; ?>" id="theme_name_display" placeholder="Theme Name">
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label for="disabledinput" class="col-sm-2 control-label">Theme Price :</label>
-							<div class="col-sm-8">
-								<input disabled="" type="text" class="form-control1" value="<?php echo isset($row[3]) ? $row[3] : ''; ?>" id="price_display" placeholder="Theme Price">
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label for="event_date" class="col-sm-2 control-label label-input-sm">Event Date</label>
-							<div class="col-sm-8">
-								<input type="date" class="form-control1 input-sm" name="date" id="event_date" min="<?php echo date('Y-m-d'); ?>" placeholder="DD/MM/YYYY" required=""/>
-								<small style="color: #888; display: block; margin-top: 5px;">Select your event date (future dates only)</small>
-							</div>
-						</div>
-						
-						<!-- Check Availability Button -->
-						<div class="form-group">
-							<label class="col-sm-2 control-label"></label>
-							<div class="col-sm-8">
-								<button type="button" id="check_availability" class="btn btn-info" style="background-color: #5bc0de; color: white; padding: 10px 20px; border: none; cursor: pointer; border-radius: 4px; margin-bottom: 10px;">
-									Check Date Availability
-								</button>
-								<p id="availability_result" style="margin-top: 10px; font-weight: bold; font-size: 14px;"></p>
-							</div>
-						</div>
-						
-						<div class="contact-w3form" align="center">
-							<input type="submit" name="submit" class="btn" value="BOOK NOW">
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="container"> 
+        <h3 class='w3ls-hdg' align="center">BOOKING & PAYMENT</h3>
+        
+        <div class="price-summary">
+            <h4>Price Summary</h4>
+            <?php foreach($theme_items as $item): ?>
+                <p><?php echo $item['nm']; ?>: Rs. <?php echo number_format($item['price']); ?></p>
+            <?php endforeach; ?>
+            <hr>
+            <h5>Total Amount: Rs. <?php echo number_format($total_price); ?></h5>
+        </div>
+        
+        <div class="payment-info">
+            <h4><i class="fa fa-lock"></i> Secure Payment</h4>
+            <p>Your payment will be processed securely through PayPal. You can pay with credit/debit card or PayPal account.</p>
+        </div>
+        
+        <div class="grid_3 grid_4">
+            <div class="tab-content">
+                <div class="tab-pane active" id="horizontal-form">
+                    <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+                        
+                        <div class="form-group">
+                            <label for="focusedinput" class="col-sm-2 control-label">Name</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control1" name="nm" pattern="[A-Za-z\s]{2,30}" title="Only Letter For Name" id="focusedinput" placeholder="Name" required="">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="smallinput" class="col-sm-2 control-label label-input-sm">Email</label>
+                            <div class="col-sm-8">
+                                <input type="email" class="form-control1 input-sm" name="email" title="Enter Proper Email Id" id="smallinput" placeholder="Email" required="">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="smallinput" class="col-sm-2 control-label label-input-sm">Mobile no</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control1 input-sm" name="mo" id="smallinput" pattern="([7-9]{1})+([0-9]{9})" title="Only Number" maxlength="10" placeholder="Mobile no" required=""/>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="focusedinput" class="col-sm-2 control-label">Your Theme :</label>
+                            <div class="col-sm-8">
+                                <img src="./images/<?php echo $first_theme['img']; ?>" height="200" width="300"/>
+                                <?php if(count($theme_items) > 1): ?>
+                                    <p><small>+ <?php echo count($theme_items)-1; ?> more theme(s)</small></p>
+                                <?php endif; ?>
+                            </div>		
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="disabledinput" class="col-sm-2 control-label">Theme Name :</label>
+                            <div class="col-sm-8">
+                                <input disabled="" type="text" class="form-control1" value="<?php echo $first_theme['nm']; ?>" placeholder="Theme Name">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="event_date" class="col-sm-2 control-label label-input-sm">Event Date</label>
+                            <div class="col-sm-8">
+                                <input type="date" class="form-control1 input-sm" name="date" id="event_date" min="<?php echo date('Y-m-d'); ?>" placeholder="DD/MM/YYYY" required=""/>
+                                <small style="color: #888; display: block; margin-top: 5px;">Select your event date (future dates only)</small>
+                            </div>
+                        </div>
+                        
+                        <!-- Check Availability Button -->
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-8">
+                                <button type="button" id="check_availability" class="btn btn-info" style="background-color: #5bc0de; color: white; padding: 10px 20px; border: none; cursor: pointer; border-radius: 4px; margin-bottom: 10px;">
+                                    Check Date Availability
+                                </button>
+                                <p id="availability_result" style="margin-top: 10px; font-weight: bold; font-size: 14px;"></p>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-8">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="terms" required> I agree to the <a href="terms.php" target="_blank">Terms and Conditions</a>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-w3form" align="center">
+                            <button type="submit" name="submit" class="paypal-button">
+                                <i class="fa fa-paypal"></i> Proceed to PayPal Payment
+                            </button>
+                            <p style="margin-top: 10px; color: #666;">
+                                <small>You will be redirected to PayPal for secure payment</small>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<!-- AJAX Script to check date availability -->
 <script>
 $(document).ready(function(){
-	$('#check_availability').click(function(){
-		var date = $('#event_date').val();
-		var theme_name = '<?php echo isset($row[2]) ? $row[2] : ""; ?>';
-		
-		if(date == '')
-		{
-			alert('Please select a date first');
-			return false;
-		}
-		
-		if(theme_name == '')
-		{
-			alert('No theme selected. Please go back and select a theme.');
-			return false;
-		}
-		
-		// Show loading message
-		$('#availability_result').html('<span style="color: #888;">⏳ Checking availability...</span>');
-		
-		$.ajax({
-			url: 'check_date_availability.php',
-			method: 'POST',
-			data: {date: date, theme_name: theme_name},
-			success: function(response){
-				if(response.trim() == 'available')
-				{
-					$('#availability_result').html('<span style="color: green; font-size: 16px;">✓ Great! This date is available for booking!</span>');
-				}
-				else
-				{
-					$('#availability_result').html('<span style="color: red; font-size: 16px;">✗ Sorry! This theme is already booked for this date. Please choose another date.</span>');
-				}
-			},
-			error: function(){
-				$('#availability_result').html('<span style="color: orange;">⚠ Error checking availability. Please try again.</span>');
-			}
-		});
-	});
+    // Datepicker
+    $("#event_date").datepicker({
+        changeMonth: true,
+        changeYear: true,
+        minDate: 0,
+        dateFormat: 'yy-mm-dd'
+    });
+    
+    // Check availability
+    $('#check_availability').click(function(){
+        var date = $('#event_date').val();
+        var theme_names = <?php echo json_encode(array_column($theme_items, 'nm')); ?>;
+        
+        if(date == '') {
+            alert('Please select a date first');
+            return false;
+        }
+        
+        $('#availability_result').html('<span style="color: #888;">⏳ Checking availability...</span>');
+        
+        $.ajax({
+            url: 'check_date_availability.php',
+            method: 'POST',
+            data: {date: date, theme_names: theme_names},
+            success: function(response){
+                if(response.trim() == 'available') {
+                    $('#availability_result').html('<span style="color: green; font-size: 16px;">✓ Great! All themes are available for this date!</span>');
+                } else {
+                    $('#availability_result').html('<span style="color: red; font-size: 16px;">✗ ' + response + '</span>');
+                }
+            },
+            error: function(){
+                $('#availability_result').html('<span style="color: orange;">⚠ Error checking availability. Please try again.</span>');
+            }
+        });
+    });
 });
 </script>
 
@@ -255,5 +295,5 @@ $(document).ready(function(){
 </html>
 
 <?php 
-	include_once("footer.php");
+    include_once("footer.php");
 ?>

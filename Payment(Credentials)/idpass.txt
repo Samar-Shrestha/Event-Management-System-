@@ -1,0 +1,9 @@
+email: sb-bbzd048600733@personal.example.com
+pass: DZ;u!Z7g
+
+
+
+credit card: 4032036093476842
+expiry: 02/2031
+cvc: any 3 digit num
+phone: 2028592237
