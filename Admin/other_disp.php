@@ -19,6 +19,7 @@
 							</tr>
 						</thead>";
 						
+						
 				while($q = mysqli_fetch_row($list))
 				{
 					echo '<tbody><tr> <td><span class="badge">'.$q[0].'</span></td><td><img src="../images/'.$q[1].'" height="150" width="220"></td><td>'.$q[2].'</td><td>'.$q[3].'</td><td><u><a href=other_edit.php?id='.$q[0].'>Edit</u></a></td><td>';?>

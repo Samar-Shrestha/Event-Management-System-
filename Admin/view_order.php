@@ -28,5 +28,6 @@
 				<a href="delete_book.php?id=<?php echo $q[0];?>" onClick="return  confirm('Do you want to Delete Y/N')"><u>Delete</u></a></td></tr><?php } ?>
 				</tbody></table></div></div></div>";
 		<?php
+		
 				include_once("footer.php");
 ?>

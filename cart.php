@@ -51,9 +51,9 @@
 				$theme_name = $res[2];
 				$theme_price = $res[3];
 				
-				// ========================================
-				// CRITICAL: CHECK FOR DOUBLE BOOKING
-				// ========================================
+			
+				//CHECK FOR DOUBLE BOOKING
+
 				$check_booking = mysqli_query($con, "SELECT * FROM booking WHERE thm_nm='$theme_name' AND date='$booking_date'");
 				
 				if(!$check_booking)

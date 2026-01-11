@@ -536,7 +536,7 @@ body::after {
 	<!-- footer -->
 	<div class="footer-bottom">
 		<div class="container">
-			<p>© 2017 Classic Events, Rajkot. All rights reserved | Design by Drashti</p>
+			<p>© 2025 Classic Events, Nepal. All rights reserved | Design by Samar</p>
 		</div>
 	</div>
 	<!-- //footer --> 

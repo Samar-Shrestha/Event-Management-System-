@@ -6,5 +6,4 @@
 			echo '<script type="text/javascript">
 				window.location="view_order.php";
 			</script>';
-			
 ?>

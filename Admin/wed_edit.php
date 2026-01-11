@@ -5,12 +5,23 @@
 	if(isset($_REQUEST['submit']))
 	{
 		$id=$_REQUEST['id'];
-		$fnm=$_FILES["image"]["name"];
 		$nm=$_REQUEST['nm'];
 		$pr=$_REQUEST['price'];
 		
-		move_uploaded_file($_FILES["image"]["tmp_name"],"../images/" .$_FILES["image"]["name"]);
-		$update=mysqli_query($con,"UPDATE wedding SET img='$fnm',nm='$nm',price='$pr' where id='$id'");
+		// Check if a new image was uploaded
+		if(!empty($_FILES["image"]["name"]))
+		{
+			// New image uploaded - update with new image
+			$fnm=$_FILES["image"]["name"];
+			move_uploaded_file($_FILES["image"]["tmp_name"],"../images/" .$_FILES["image"]["name"]);
+			$update=mysqli_query($con,"UPDATE wedding SET img='$fnm',nm='$nm',price='$pr' where id='$id'");
+		}
+		else
+		{
+			// No new image - update without changing image
+			$update=mysqli_query($con,"UPDATE wedding SET nm='$nm',price='$pr' where id='$id'");
+		}
+		
 		if($update>0)
 		{
 			echo "<script> alert('Updated');</script>";

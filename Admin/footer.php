@@ -6,7 +6,7 @@
 				<div class="social-icons">
 					<div class="clearfix"> </div>
 				</div> 
-				<p>© 2017 Classic Events, Rajkot. All rights reserved | Design by Drashti</p>	
+				<p>ï¿½ 2017 Classic Events, Rajkot. All rights reserved | Design by Drashti</p>	
 			</div>
 		</div>
 		<!-- //copy-right -->
@@ -46,5 +46,6 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="js/bootstrap.js"></script>
+		
 </body>
 </html>

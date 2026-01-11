@@ -21,6 +21,9 @@
 	</div>
 	<!-- <video autoplay loop muted plays-inline class="back-video">
     <source src="video/banquet_video.mp4" type="video/mp4"> -->
+
+
+		
 </video>
 	<!-- //modal -->  
 	<!-- banner-bottom -->

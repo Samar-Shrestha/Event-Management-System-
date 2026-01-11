@@ -53,6 +53,7 @@ Author: CLASSIC EVENTS
 				</button>
 				<div class="header-right">
 					<div class="agileits-topnav">
+						
 						<ul>
 							<a href="logout.php"><div align="right"><button class="btn warning">LOG OUT</button></div></a>
 								<div class="clearfix"> </div> 

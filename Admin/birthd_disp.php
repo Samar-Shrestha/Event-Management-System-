@@ -27,4 +27,5 @@
 						}
 					echo "</tbody></table></div></div></div>";
 					include_once("footer.php");
+					
 ?>

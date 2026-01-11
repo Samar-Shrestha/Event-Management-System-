@@ -19,6 +19,7 @@
 						
 				while($r = mysqli_fetch_row($a))
 				{
+					
 					echo '<tbody><tr> <td>'.$r[1].'</td><td>'.$r[2].'</td><td>'.$r[3].'</td><td>';?>
 				<a href="delete_feedback.php?id=<?php echo $r[0];?>" onClick="return  confirm('Do you want to Delete Y/N')"><u>Delete</u></a></td></tr>
 				<?php

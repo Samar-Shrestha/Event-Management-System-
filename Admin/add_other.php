@@ -11,6 +11,7 @@
 		move_uploaded_file($_FILES["image"]["tmp_name"],"../images/" .$_FILES["image"]["name"]);
 		@session_start();
 		if(isset($_SESSION['admin']))
+			
 				{
 					$qry1=mysqli_query($con,"INSERT INTO otherevent(img,nm,price)VALUES('$fnm','$nm',$pr)");
 					if($qry1)
