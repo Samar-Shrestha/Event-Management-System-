@@ -1,40 +1,58 @@
 <?php
+// This file checks if themes are available for booking on a specific date
+// It's called via AJAX from cart.php
+
 include('Database/connect.php');
 
-if(isset($_POST['date']) && isset($_POST['theme_names'])) {
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+if(isset($_POST['date']) && isset($_POST['theme_names']))
+{
+    // Get and sanitize input
     $date = mysqli_real_escape_string($con, $_POST['date']);
+    $theme_names = $_POST['theme_names']; // This is an array now
     
-    if(is_array($_POST['theme_names'])) {
-        $theme_names = $_POST['theme_names'];
-        $unavailable = [];
+    $unavailable_themes = [];
+    
+    // Check each theme
+    foreach($theme_names as $theme_name)
+    {
+        $theme_name = mysqli_real_escape_string($con, $theme_name);
         
-        foreach($theme_names as $theme_name) {
-            $theme_name_clean = mysqli_real_escape_string($con, $theme_name);
-            $check_booking = mysqli_query($con, "SELECT * FROM booking WHERE thm_nm='$theme_name_clean' AND date='$date' AND payment_status='completed'");
-            
-            if(mysqli_num_rows($check_booking) > 0) {
-                $unavailable[] = $theme_name;
-            }
+        // Check if this theme is already booked for this date with completed payment
+        $check = mysqli_query($con, "SELECT * FROM booking WHERE thm_nm='$theme_name' AND date='$date' AND payment_status='completed'");
+        
+        if(!$check)
+        {
+            // Database error
+            echo "Database error: " . mysqli_error($con);
+            exit();
         }
         
-        if(empty($unavailable)) {
-            echo "available";
-        } else {
-            echo "The following themes are not available: " . implode(", ", $unavailable);
+        if(mysqli_num_rows($check) > 0)
+        {
+            // Theme is already booked for this date
+            $unavailable_themes[] = $theme_name;
         }
-    } else {
-        $theme_name = mysqli_real_escape_string($con, $_POST['theme_names']);
-        $check_booking = mysqli_query($con, "SELECT * FROM booking WHERE thm_nm='$theme_name' AND date='$date' AND payment_status='completed'");
-        
-        if(mysqli_num_rows($check_booking) > 0) {
-            echo "not_available";
-        } else {
-            echo "available";
-        }
+    }
+    
+    // Return result
+    if(empty($unavailable_themes))
+    {
+        // All themes are available
+        echo "available";
+    }
+    else
+    {
+        // Some themes are booked
+        $booked_list = implode(", ", $unavailable_themes);
+        echo "The following themes are already booked: " . $booked_list;
     }
 }
 else
 {
-    echo "error";
+    echo "Missing required data (date or theme_names)";
 }
 ?>
