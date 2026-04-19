@@ -36,11 +36,7 @@ if($user_email) {
             font-size: 12px;
             font-weight: bold;
         }
-        .status.completed {
-            background: #d4edda;
-            color: #155724;
-        }
-        .status.pending {
+          .status.pending {
             background: #fff3cd;
             color: #856404;
         }
@@ -67,7 +63,7 @@ if($user_email) {
                     <div class="col-md-3">
                         <img src="./images/<?php echo htmlspecialchars($booking['theme']); ?>" class="img-fluid" style="max-height: 150px;">
                     </div>
-                    <div class="col-md-9">
+                     <div class="col-md-9">
                         <h4><?php echo htmlspecialchars($booking['thm_nm']); ?></h4>
                         <p><strong>Booking Date:</strong> <?php echo htmlspecialchars($booking['date']); ?></p>
                         <p><strong>Price:</strong> Rs. <?php echo number_format($booking['price']); ?></p>
@@ -90,5 +86,4 @@ if($user_email) {
 
 </body>
 </html>
-
 <?php include_once("footer.php"); ?>

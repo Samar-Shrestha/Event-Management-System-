@@ -47,7 +47,7 @@
 				<div class="social-icons">
 					<div class="clearfix"> </div>
 				</div> 
-				<p>  � 2025 Classic Events, Nepal . All rights reserved | Design by Samar</p>	
+				<p>  � 2026 Classic Events, Nepal . All rights reserved | Design by Samar</p>	
 			</div>
 		</div>
 		<!-- //copy-right -->

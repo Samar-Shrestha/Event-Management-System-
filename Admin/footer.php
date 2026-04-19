@@ -6,7 +6,7 @@
 				<div class="social-icons">
 					<div class="clearfix"> </div>
 				</div> 
-				<p>� 2017 Classic Events, Rajkot. All rights reserved | Design by Drashti</p>	
+				<p>� 2026 Classic Events, Nepal. All rights reserved | Design by Samar</p>	
 			</div>
 		</div>
 		<!-- //copy-right -->

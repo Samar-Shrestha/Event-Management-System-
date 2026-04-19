@@ -1,0 +1,66 @@
+[03-Apr-2026 10:04:58 Europe/Berlin] ✅ Email sent to: samarshrestha77@gmail.com for booking #53
+[03-Apr-2026 10:31:43 Europe/Berlin] ✅ Email sent to: samarshrestha77@gmail.com for booking #54
+[03-Apr-2026 11:57:36 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined function ImageCreate() in D:\xampp\htdocs\Classic_Event\Classic_Event\phpqrcode\qrimage.php:74
+Stack trace:
+#0 D:\xampp\htdocs\Classic_Event\Classic_Event\phpqrcode\qrimage.php(32): QRimage::image(Array, 10, 4)
+#1 D:\xampp\htdocs\Classic_Event\Classic_Event\phpqrcode\qrencode.php(494): QRimage::png(Array, 'D:\\xampp\\htdocs...', 10, 4, false)
+#2 D:\xampp\htdocs\Classic_Event\Classic_Event\phpqrcode\qrencode.php(286): QRencode->encodePNG('http://192.168....', 'D:\\xampp\\htdocs...', false)
+#3 D:\xampp\htdocs\Classic_Event\Classic_Event\send_ticket_email.php(47): QRcode::png('http://192.168....', 'D:\\xampp\\htdocs...', 0, 10)
+#4 D:\xampp\htdocs\Classic_Event\Classic_Event\send_ticket_email.php(77): generateQRCodeBase64('http://192.168....')
+#5 D:\xampp\htdocs\Classic_Event\Classic_Event\paypal_success.php(78): sendTicketEmail(Array, 'event')
+#6 {main}
+  thrown in D:\xampp\htdocs\Classic_Event\Classic_Event\phpqrcode\qrimage.php on line 74
+[03-Apr-2026 12:06:13 Europe/Berlin] ✅ Email sent to: samarshrestha77@gmail.com for booking #55
+[04-Apr-2026 07:41:45 Europe/Berlin] PHP Fatal error:  Uncaught Error: Undefined constant "MAIL_FROM" in D:\xampp\htdocs\Classic_Event\Classic_Event\send_ticket_email.php:70
+Stack trace:
+#0 D:\xampp\htdocs\Classic_Event\Classic_Event\paypal_success.php(71): sendTicketEmail(Array)
+#1 {main}
+  thrown in D:\xampp\htdocs\Classic_Event\Classic_Event\send_ticket_email.php on line 70
+[04-Apr-2026 07:42:55 Europe/Berlin] PHP Fatal error:  Uncaught Error: Undefined constant "shresthasamar76gmail" in D:\xampp\htdocs\Classic_Event\Classic_Event\send_ticket_email.php:70
+Stack trace:
+#0 D:\xampp\htdocs\Classic_Event\Classic_Event\paypal_success.php(71): sendTicketEmail(Array)
+#1 {main}
+  thrown in D:\xampp\htdocs\Classic_Event\Classic_Event\send_ticket_email.php on line 70
+[04-Apr-2026 07:49:16 Europe/Berlin] ✅ Email sent to samarshrestha77@gmail.com for booking #56 (token: 01d47dc8a9acbbd4ec6a5afd8b6f58f5ebe9b5714285509066c291c70ba45ab0)
+[04-Apr-2026 08:10:33 Europe/Berlin] ✅ Email sent to: samarshrestha77@gmail.com for booking #57
+[04-Apr-2026 08:45:52 Europe/Berlin] ✅ Email sent to: samarshrestha77@gmail.com for booking #58
+[04-Apr-2026 09:51:43 Europe/Berlin] ❌ Email failed for booking #59: SMTP Error: Could not authenticate.
+[04-Apr-2026 09:51:43 Europe/Berlin] Email failed for bookings: 59
+[04-Apr-2026 09:51:43 Europe/Berlin] Debug info: Array
+(
+    [0] => Attempting to send email to: samarshrestha77@gmail.com
+    [1] => ❌ sendTicketEmail returned FALSE for booking #59
+)
+
+[04-Apr-2026 10:10:02 Europe/Berlin] ❌ Email failed for booking #60: SMTP Error: Could not authenticate.
+[04-Apr-2026 10:10:05 Europe/Berlin] ❌ Email failed for booking #61: SMTP Error: Could not authenticate.
+[04-Apr-2026 10:10:05 Europe/Berlin] Email failed for bookings: 60,61
+[04-Apr-2026 10:10:05 Europe/Berlin] Debug info: Array
+(
+    [0] => Attempting to send email to: samarshrestha77@gmail.com
+    [1] => ❌ sendTicketEmail returned FALSE for booking #60
+    [2] => Attempting to send email to: samarshrestha77@gmail.com
+    [3] => ❌ sendTicketEmail returned FALSE for booking #61
+)
+
+[04-Apr-2026 10:31:09 Europe/Berlin] ✅ Email sent to: samarshrestha77@gmail.com for booking #62
+[04-Apr-2026 10:31:14 Europe/Berlin] ✅ Email sent to: samarshrestha77@gmail.com for booking #63
+[04-Apr-2026 10:31:19 Europe/Berlin] ✅ Email sent to: samarshrestha77@gmail.com for booking #64
+[04-Apr-2026 10:31:24 Europe/Berlin] ✅ Email sent to: samarshrestha77@gmail.com for booking #65
+[04-Apr-2026 10:32:48 Europe/Berlin] ✅ Email sent to: samarshrestha77@gmail.com for booking #66
+[04-Apr-2026 10:42:57 Europe/Berlin] ✅ Email sent to: samarshrestha77@gmail.com for booking #67
+[04-Apr-2026 10:55:45 Europe/Berlin] ✅ Email sent to: samarshrestha77@gmail.com for booking #68
+[04-Apr-2026 11:07:15 Europe/Berlin] ✅ Email sent to: samarshrestha77@gmail.com for booking #69
+[04-Apr-2026 11:07:20 Europe/Berlin] ✅ Email sent to: samarshrestha77@gmail.com for booking #70
+[04-Apr-2026 11:07:25 Europe/Berlin] ✅ Email sent to: samarshrestha77@gmail.com for booking #71
+[04-Apr-2026 11:07:30 Europe/Berlin] ✅ Email sent to: samarshrestha77@gmail.com for booking #72
+[04-Apr-2026 11:07:35 Europe/Berlin] ✅ Email sent to: samarshrestha77@gmail.com for booking #73
+[04-Apr-2026 11:36:14 Europe/Berlin] ✅ Email sent to: samarshrestha77@gmail.com for booking #74
+[04-Apr-2026 11:44:28 Europe/Berlin] ✅ Email sent to: samarshrestha77@gmail.com for booking #75
+[08-Apr-2026 15:03:45 Europe/Berlin] ✅ Email sent to: samarshrestha77@gmail.com for booking #76
+[09-Apr-2026 04:14:18 Europe/Berlin] ✅ Email sent to: samarshrestha77@gmail.com for booking #77
+[09-Apr-2026 04:19:34 Europe/Berlin] ✅ Email sent to: samarshrestha77@gmail.com for booking #78
+[09-Apr-2026 04:21:55 Europe/Berlin] ✅ Email sent to: samarshrestha77@gmail.com for booking #79
+[09-Apr-2026 04:59:47 Europe/Berlin] ✅ Email sent to: samarshrestha77@gmail.com for booking #80
+[18-Apr-2026 10:25:54 Europe/Berlin] ✅ Email sent to: samarshrestha77@gmail.com for booking #81
+[18-Apr-2026 10:30:51 Europe/Berlin] ✅ Email sent to: samarshrestha77@gmail.com for booking #82

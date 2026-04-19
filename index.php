@@ -19,21 +19,288 @@
 			</div>
 		</div>
 	</div>
-	<!-- <video autoplay loop muted plays-inline class="back-video">
-    <source src="video/banquet_video.mp4" type="video/mp4"> -->
 
-
-		
-</video>
 	<!-- //modal -->  
 	<!-- banner-bottom -->
 	<div class="w3-agile-text">
 		<div class="container"> 
 			<h2>Making Moments Memorable...</h2>
-		<!--	<p>Vivamus vitae elementum velit. Morbi convallis nisi velit, maximus consequat lacus sagittis et. Sed at fringilla erat, id mollis eros.</p>-->
 		</div>
 	</div>
 	<!-- //banner-bottom -->
+	
+	<!-- POPULAR EVENTS SECTION -->
+	<style>
+	.popular-events {
+		padding: 60px 0;
+		background-color: #f9f9f9;
+	}
+	
+	.popular-header {
+		text-align: center;
+		margin-bottom: 50px;
+	}
+	
+	.popular-header h2 {
+		font-size: 36px;
+		color: #8B2E2E;
+		margin-bottom: 10px;
+	}
+	
+	.popular-header p {
+		font-size: 16px;
+		color: #666;
+	}
+	
+	.popular-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+		gap: 25px;
+	}
+	
+	.popular-card {
+		background: white;
+		border-radius: 10px;
+		overflow: hidden;
+		box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+		transition: transform 0.3s, box-shadow 0.3s;
+		position: relative;
+	}
+	
+	.popular-card:hover {
+		transform: translateY(-8px);
+		box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+	}
+	
+	.popular-badge {
+		position: absolute;
+		top: 15px;
+		right: 15px;
+		background: #FF6B6B;
+		color: white;
+		padding: 8px 15px;
+		border-radius: 20px;
+		font-size: 12px;
+		font-weight: bold;
+		z-index: 10;
+	}
+	
+	.popular-image {
+		width: 100%;
+		height: 200px;
+		object-fit: cover;
+	}
+	
+	.popular-content {
+		padding: 20px;
+	}
+	
+	.popular-type {
+		display: inline-block;
+		padding: 5px 12px;
+		background-color: #8B2E2E;
+		color: white;
+		border-radius: 15px;
+		font-size: 11px;
+		margin-bottom: 10px;
+	}
+	
+	.popular-title {
+		font-size: 18px;
+		font-weight: bold;
+		color: #333;
+		margin-bottom: 10px;
+	}
+	
+	.popular-location {
+		color: #666;
+		font-size: 14px;
+		margin-bottom: 8px;
+	}
+	
+	.popular-rating {
+		color: #FFA500;
+		margin-bottom: 10px;
+		font-size: 14px;
+	}
+	
+	.popular-price {
+		font-size: 22px;
+		font-weight: bold;
+		color: #4CAF50;
+		margin-bottom: 10px;
+	}
+	
+	.popular-views {
+		font-size: 13px;
+		color: #999;
+		margin-bottom: 15px;
+	}
+	
+	.popular-btn {
+		display: block;
+		width: 100%;
+		padding: 12px;
+		background-color: #2196F3;
+		color: white;
+		text-align: center;
+		border-radius: 5px;
+		text-decoration: none;
+		transition: background-color 0.3s;
+		border: none;
+		cursor: pointer;
+	}
+	
+	.popular-btn:hover {
+		background-color: #0b7dda;
+		color: white;
+		text-decoration: none;
+	}
+	
+	.view-all-btn {
+		text-align: center;
+		margin-top: 40px;
+	}
+	
+	.view-all-btn a {
+		display: inline-block;
+		padding: 15px 40px;
+		background-color: #8B2E2E;
+		color: white;
+		border-radius: 30px;
+		text-decoration: none;
+		font-size: 16px;
+		transition: background-color 0.3s;
+	}
+	
+	.view-all-btn a:hover {
+		background-color: #6d2323;
+		color: white;
+		text-decoration: none;
+	}
+	</style>
+	
+	<div class="popular-events">
+		<div class="container">
+			<div class="popular-header">
+				<h2>🔥 Most Popular Events</h2>
+				<p>Events loved by our customers</p>
+			</div>
+			
+			<div class="popular-grid">
+				<?php
+				// Get popular events from wedding table
+				$weddingQuery = "SELECT id, nm, img, price, location, rating, view_count, capacity, booked_count, 
+				                 'Wedding' as event_type, 'book_wed.php' as booking_page 
+				                 FROM wedding ORDER BY view_count DESC LIMIT 2";
+				$weddingResult = mysqli_query($con, $weddingQuery);
+				
+				// Get popular events from birthday table
+				$birthdayQuery = "SELECT id, nm, img, price, location, rating, view_count, capacity, booked_count, 
+				                  'Birthday' as event_type, 'book_birthd.php' as booking_page 
+				                  FROM birthday ORDER BY view_count DESC LIMIT 2";
+				$birthdayResult = mysqli_query($con, $birthdayQuery);
+				
+				// Get popular events from anniversary table
+				$anniversaryQuery = "SELECT id, nm, img, price, location, rating, view_count, capacity, booked_count, 
+				                     'Anniversary' as event_type, 'book_anni.php' as booking_page 
+				                     FROM anniversary ORDER BY view_count DESC LIMIT 2";
+				$anniversaryResult = mysqli_query($con, $anniversaryQuery);
+				
+				// Get popular events from otherevent table
+				$otherQuery = "SELECT id, nm, img, price, location, rating, view_count, capacity, booked_count, 
+				               'Entertainment' as event_type, 'book_other.php' as booking_page 
+				               FROM otherevent ORDER BY view_count DESC LIMIT 2";
+				$otherResult = mysqli_query($con, $otherQuery);
+				
+				// Combine all results
+				$allEvents = [];
+				
+				if($weddingResult && mysqli_num_rows($weddingResult) > 0) {
+					while($row = mysqli_fetch_assoc($weddingResult)) {
+						$allEvents[] = $row;
+					}
+				}
+				
+				if($birthdayResult && mysqli_num_rows($birthdayResult) > 0) {
+					while($row = mysqli_fetch_assoc($birthdayResult)) {
+						$allEvents[] = $row;
+					}
+				}
+				
+				if($anniversaryResult && mysqli_num_rows($anniversaryResult) > 0) {
+					while($row = mysqli_fetch_assoc($anniversaryResult)) {
+						$allEvents[] = $row;
+					}
+				}
+				
+				if($otherResult && mysqli_num_rows($otherResult) > 0) {
+					while($row = mysqli_fetch_assoc($otherResult)) {
+						$allEvents[] = $row;
+					}
+				}
+				
+				// Sort by view_count
+				usort($allEvents, function($a, $b) {
+					return $b['view_count'] - $a['view_count'];
+				});
+				
+				// Display top 8
+				$allEvents = array_slice($allEvents, 0, 8);
+				
+				if(count($allEvents) > 0) {
+					$rank = 1;
+					foreach($allEvents as $event) {
+						// Calculate availability
+						$capacity = isset($event['capacity']) ? $event['capacity'] : 800;
+						$bookedCount = isset($event['booked_count']) ? $event['booked_count'] : 0;
+						$available = $capacity - $bookedCount;
+						
+						// Generate stars
+						$rating = isset($event['rating']) ? $event['rating'] : 5;
+						$stars = str_repeat('★', $rating) . str_repeat('☆', 5 - $rating);
+						
+						echo "<div class='popular-card'>";
+						
+						// Show badge for top 3
+						if($rank <= 3) {
+							$badges = ['🥇 #1 Most Popular', '🥈 #2 Most Popular', '🥉 #3 Most Popular'];
+							echo "<div class='popular-badge'>{$badges[$rank-1]}</div>";
+						}
+						
+						echo "<img src='images/{$event['img']}' alt='{$event['nm']}' class='popular-image'>";
+						echo "<div class='popular-content'>";
+						echo "<span class='popular-type'>{$event['event_type']}</span>";
+						echo "<h3 class='popular-title'>{$event['nm']}</h3>";
+						echo "<p class='popular-location'>📍 {$event['location']}</p>";
+						echo "<p class='popular-rating'>$stars ($rating/5)</p>";
+						echo "<p class='popular-price'>NPR " . number_format($event['price']) . "</p>";
+						echo "<p class='popular-views'>👁️ {$event['view_count']} views</p>";
+						
+						if($available > 0) {
+							echo "<a href='{$event['booking_page']}?id={$event['id']}' class='popular-btn'>Book Now - $available seats left</a>";
+						} else {
+							echo "<button class='popular-btn' style='background-color: #999; cursor: not-allowed;' disabled>Fully Booked</button>";
+						}
+						
+						echo "</div>";
+						echo "</div>";
+						
+						$rank++;
+					}
+				} else {
+					echo "<p style='text-align: center; grid-column: 1/-1;'>No popular events yet. Be the first to explore!</p>";
+				}
+				?>
+			</div>
+			
+			<div class="view-all-btn">
+				<a href="gallery.php">View All Events →</a>
+			</div>
+		</div>
+	</div>
+	<!-- END POPULAR EVENTS -->
+	
 	<!-- features -->
 	<div class="features">
 		<div class="container">
@@ -87,7 +354,7 @@
 	<!-- //features -->
 	<?php
 		include("projects.php");
-		?>
+	?>
 	
 	<!-- services -->
 	<div class="services">
@@ -123,15 +390,3 @@
 	<?php
 		include_once("footer.php");
 	?>
-
-
-
-
-
-
-
-
-
-
-
-

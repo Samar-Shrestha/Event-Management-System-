@@ -1,5 +1,5 @@
 <?php
-// This file checks if themes are available for booking on a specific date
+// This file checks if a specific date is available for booking (globally)
 // It's called via AJAX from cart.php
 
 include('Database/connect.php');
@@ -12,43 +12,27 @@ if(isset($_POST['date']) && isset($_POST['theme_names']))
 {
     // Get and sanitize input
     $date = mysqli_real_escape_string($con, $_POST['date']);
-    $theme_names = $_POST['theme_names']; // This is an array now
+    $theme_names = $_POST['theme_names']; // This is an array (not used for global check, but kept for compatibility)
+
+    // Check if ANY booking (pending or completed) exists for this date
+    $check = mysqli_query($con, "SELECT id FROM booking WHERE date = '$date' AND payment_status IN ('pending','completed') LIMIT 1");
     
-    $unavailable_themes = [];
-    
-    // Check each theme
-    foreach($theme_names as $theme_name)
+    if(!$check)
     {
-        $theme_name = mysqli_real_escape_string($con, $theme_name);
-        
-        // Check if this theme is already booked for this date with completed payment
-        $check = mysqli_query($con, "SELECT * FROM booking WHERE thm_nm='$theme_name' AND date='$date' AND payment_status='completed'");
-        
-        if(!$check)
-        {
-            // Database error
-            echo "Database error: " . mysqli_error($con);
-            exit();
-        }
-        
-        if(mysqli_num_rows($check) > 0)
-        {
-            // Theme is already booked for this date
-            $unavailable_themes[] = $theme_name;
-        }
+        // Database error
+        echo "Database error: " . mysqli_error($con);
+        exit();
     }
     
-    // Return result
-    if(empty($unavailable_themes))
+    if(mysqli_num_rows($check) > 0)
     {
-        // All themes are available
-        echo "available";
+        // Date is already booked
+        echo "The selected date is already booked. Please choose another date.";
     }
     else
     {
-        // Some themes are booked
-        $booked_list = implode(", ", $unavailable_themes);
-        echo "The following themes are already booked: " . $booked_list;
+        // Date is free
+        echo "available";
     }
 }
 else

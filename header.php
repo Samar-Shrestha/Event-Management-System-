@@ -26,6 +26,70 @@ Author: CLASSIC EVENTS
 <link href="//fonts.googleapis.com/css?family=Abel" rel="stylesheet">
 <link href="//fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
 <!-- //web fonts -->
+
+<!-- SEARCH BAR & BUTTON STYLES -->
+<style>
+.search-container {
+	background: #f8f8f8;
+	padding: 15px 0;
+	border-bottom: 2px solid #8B2E2E;
+}
+
+.search-form {
+	display: flex;
+	max-width: 600px;
+	margin: 0 auto;
+	gap: 10px;
+}
+
+.search-input {
+	flex: 1;
+	padding: 12px 20px;
+	border: 2px solid #ddd;
+	border-radius: 25px;
+	font-size: 15px;
+	outline: none;
+	transition: border-color 0.3s;
+}
+
+.search-input:focus {
+	border-color: #8B2E2E;
+}
+
+.search-btn {
+	padding: 12px 30px;
+	background-color: #8B2E2E;
+	color: white;
+	border: none;
+	border-radius: 25px;
+	cursor: pointer;
+	font-size: 15px;
+	transition: background-color 0.3s;
+}
+
+.search-btn:hover {
+	background-color: #6d2323;
+}
+
+/* Consistent blue button for both BOOK and MY BOOKINGS */
+.btn.blue {
+    background-color: #2c6e9e;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    transition: background 0.3s;
+}
+.btn.blue:hover {
+    background-color: #1e4f73;
+}
+
+@media (max-width: 768px) {
+	.search-form {
+		margin: 0 15px;
+	}
+}
+</style>
 </head>
 <body>
 	<!-- header -->
@@ -50,88 +114,24 @@ Author: CLASSIC EVENTS
 							<li><span class="glyphicon glyphicon-earphone"></span> +977 90333 36811</li>
 							<li><a class="email-link" href="mailto:example@mail.com"> <span class="glyphicon glyphicon-envelope"></span> Classicevents@gmail.com </a></li>
 							<li class="social-icons"> 
-							<?php
-							@session_start();
-							if(isset($_SESSION['uname']))
-							{
-										echo "<a href='gallery.php'><button class='btn default'>BOOK YOUR EVENT </button></a> ";
-										echo "<a href='logout.php'><button class='btn warning'>LOGOUT</button></a>";
-							}
-							else
-							{
-										echo "<a href='registration.php'><button class='btn default'>SIGN IN</button></a> ";
-										echo "<a href='login.php'><button class='btn warning'>LOGIN</button></a>";
-							}
-							?>
-								<div class="clearfix"> </div> 
-							</li>
+    <?php
+    @session_start();
+    if(isset($_SESSION['uname']))
+    {
+        echo "<a href='gallery.php'><button class='btn blue'>BOOK YOUR EVENT</button></a> ";
+        echo "<a href='my_bookings.php'><button class='btn blue'>📋 MY BOOKINGS</button></a> ";
+        echo "<a href='logout.php'><button class='btn warning'>LOGOUT</button></a>";
+    }
+    else
+    {
+        echo "<a href='registration.php'><button class='btn blue'>SIGN IN</button></a> ";
+        echo "<a href='login.php'><button class='btn warning'>LOGIN</button></a>";
+    }
+    ?>
+    <div class="clearfix"> </div> 
+</li>
 						</ul>
 					</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 					<!-- Collect the nav links, forms, and other content for toggling -->
 					<div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">					
@@ -154,6 +154,17 @@ Author: CLASSIC EVENTS
 				</div>
 				<div class="clearfix"> </div>
 			</div>	
-		</nav>		
+		</nav>
+		
+		<!-- SEARCH BAR SECTION -->
+		<div class="search-container">
+			<form action="search_results.php" method="GET" class="search-form">
+				<input type="text" name="search" class="search-input" placeholder="Search events by name or location..." required>
+				<button type="submit" class="search-btn">
+					<span class="glyphicon glyphicon-search"></span> Search
+				</button>
+			</form>
+		</div>
+		<!-- END SEARCH BAR -->
 	</div>	
 	<!-- //header -->
