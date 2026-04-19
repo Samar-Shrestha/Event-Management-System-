@@ -183,8 +183,8 @@
 	<div class="popular-events">
 		<div class="container">
 			<div class="popular-header">
-				<h2>🔥 Most Popular Events</h2>
-				<p>Events loved by our customers</p>
+				<h2>🔥 Most Popular Venues</h2>
+				<p>Venues loved by our customers</p>
 			</div>
 			
 			<div class="popular-grid">

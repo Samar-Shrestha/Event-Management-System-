@@ -15,19 +15,18 @@ require_once __DIR__ . '/PHPMailer/src/SMTP.php';
 require_once __DIR__ . '/phpqrcode/qrlib.php';
 
 // ========== YOUR GMAIL CREDENTIALS ==========
-define('SMTP_HOST',      'smtp.gmail.com');
-define('SMTP_USERNAME',  'shresthasamar76@gmail.com');
-define('SMTP_PASSWORD',  'gnibmzrariykbahd');   // App Password
+define('SMTP_HOST',      '.gmail.com');
+define('SMTP_USERNAME',  '@gmail.com');
+define('SMTP_PASSWORD',  '');   // App Password
 define('SMTP_PORT',      587);
-define('MAIL_FROM',      'shresthasamar76@gmail.com');
+define('MAIL_FROM',      '@gmail.com');
 define('MAIL_FROM_NAME', 'Classic Events');
 // =============================================
 
 // Get base URL for QR code (use your public IP or domain later)
 function getBaseUrl() {
-    // For now use local IP – works for QR image generation, but scan will only work on same WiFi
-    // Later replace with ngrok or domain
-    $local_ip = '192.168.1.9';   // <-- YOUR LOCAL IP
+    // ✅ CHANGED: use hostname 'samar' instead of IP
+    $local_ip = 'samar';   // <-- YOUR COMPUTER'S HOSTNAME
     $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
     $script_dir = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
     return $protocol . '://' . $local_ip . $script_dir;
@@ -185,7 +184,7 @@ function buildEmailHTML(array $b, string $table, bool $qr_available, string $inv
                                 <tr><td style="border-bottom:1px solid #eee;"><strong>Event Date:</strong></td><td>$date</td></tr>
                                 <tr><td style="border-bottom:1px solid #eee;"><strong>Host Name:</strong></td><td>$name</td></tr>
                                 <tr><td style="border-bottom:1px solid #eee;"><strong>📍 Event Location:</strong></td><td>Classic Events Hall, Kathmandu</td></tr>
-                                <tr><td><strong>Amount Paid:</strong></td><td>NPR $price</td></tr>
+                                <tr><td style="border-bottom:1px solid #eee;"><strong>Amount Paid:</strong></td><td>NPR $price</td></tr>
                             </table>
                             
                             <!-- ADDED: Warning message -->
@@ -216,3 +215,4 @@ function buildEmailHTML(array $b, string $table, bool $qr_available, string $inv
 </html>
 HTML;
 }
+?>

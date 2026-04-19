@@ -47,30 +47,19 @@ if (isset($_POST['submit'])) {
 
     $errors = [];
 
-    // ── 1. Check: same user already has a booking (any theme) on this date ───
-    $user_date_check = mysqli_query($con, "
-        SELECT id, thm_nm FROM booking
-        WHERE email = '$customer_email'
-        AND date = '$booking_date'
-        AND payment_status IN ('pending','completed')
-        LIMIT 1
-    ");
-    if (mysqli_num_rows($user_date_check) > 0) {
-        $existing = mysqli_fetch_assoc($user_date_check);
-        $errors[] = "You have already booked an event on $booking_date (Theme: {$existing['thm_nm']}). You cannot book another event on the same day.";
-    }
-
-    // ── 2. Check: date already taken by ANY other user (global uniqueness) ───
-    $global_date_check = mysqli_query($con, "
-        SELECT id, email, thm_nm FROM booking
-        WHERE date = '$booking_date'
-        AND payment_status IN ('pending','completed')
-        AND email != '$customer_email'
-        LIMIT 1
-    ");
-    if (mysqli_num_rows($global_date_check) > 0) {
-        $taken = mysqli_fetch_assoc($global_date_check);
-        $errors[] = "The date $booking_date is already booked by another customer. Please choose a different date.";
+    // ── Check: For each theme in cart, ensure it is not already booked on this date (by anyone) ──
+    foreach ($theme_items as $item) {
+        $thm = mysqli_real_escape_string($con, $item['nm']);
+        $theme_check = mysqli_query($con, "
+            SELECT id FROM booking
+            WHERE thm_nm = '$thm'
+            AND date = '$booking_date'
+            AND payment_status IN ('pending','completed')
+            LIMIT 1
+        ");
+        if (mysqli_num_rows($theme_check) > 0) {
+            $errors[] = "The theme \"{$item['nm']}\" is already booked on $booking_date. Please choose a different date or remove this theme.";
+        }
     }
 
     if (!empty($errors)) {
@@ -79,7 +68,7 @@ if (isset($_POST['submit'])) {
         exit();
     }
 
-    // ── 3. All checks passed — insert bookings ───────────────────────────────
+    // ── All checks passed — insert bookings ───────────────────────────────
     if (!isset($_SESSION['booking_ids'])) {
         $_SESSION['booking_ids'] = [];
     }
@@ -184,7 +173,6 @@ include("header.php");
             margin-top: 8px;
             font-size: 14px;
         }
-        /* Cart item styling */
         .cart-item {
             background: #f9f9f9;
             border: 1px solid #ddd;
@@ -231,16 +219,13 @@ include("header.php");
         }
         .clear-cart-btn:hover { background: #c9302c; }
 
-        /* ── Terms popup ── */
         #terms_trigger {
             color: #007bff;
             text-decoration: underline;
             cursor: pointer;
             font-weight: 500;
         }
-        #terms_trigger:hover {
-            color: #0056b3;
-        }
+        #terms_trigger:hover { color: #0056b3; }
         #terms_popup {
             display: none;
             background: #fff;
@@ -402,7 +387,7 @@ include("header.php");
                                     Select your event date (future dates only)
                                 </small>
                                 <div class="date-taken-msg" id="date_taken_msg">
-                                    &#9888;&#65039; This date is already booked. Please choose a different date.
+                                    &#9888;&#65039; One or more themes are already booked on this date.
                                 </div>
                             </div>
                         </div>
@@ -439,7 +424,7 @@ include("header.php");
                                     <ol>
                                         <li>Bookings are confirmed only after full payment is received via PayPal.</li>
                                         <li>All event dates are subject to availability on a first-come, first-served basis.</li>
-                                        <li>Only one booking per customer is allowed per date.</li>
+                                        <li>You may book multiple different themes on the same date, but each theme can only be booked once per date.</li>
                                         <li>Accurate personal details (name, email, mobile number) must be provided at the time of booking.</li>
                                         <li>Classic Event reserves the right to cancel any booking if the provided information is found to be false or misleading.</li>
                                         <li>Event themes are as described on the website; minor decorative variations may apply.</li>
@@ -477,7 +462,6 @@ include("header.php");
 <script>
 $(document).ready(function(){
 
-    // ── Date picker ──────────────────────────────────────────────────────────
     $("#event_date").datepicker({
         changeMonth: true,
         changeYear: true,
@@ -505,7 +489,7 @@ $(document).ready(function(){
                 if (response.trim() === 'available') {
                     $('#date_taken_msg').hide();
                     $('#submit_btn').prop('disabled', false).css('opacity','1');
-                    $('#availability_result').html('<span style="color:green;font-size:16px;">&#10003; Date is available!</span>');
+                    $('#availability_result').html('<span style="color:green;font-size:16px;">&#10003; All themes available for this date!</span>');
                 } else {
                     $('#date_taken_msg').show();
                     $('#submit_btn').prop('disabled', true).css('opacity','0.5');
@@ -524,7 +508,7 @@ $(document).ready(function(){
         checkDateLive(date);
     });
 
-    // ── Terms & Conditions popup ─────────────────────────────────────────────
+    // Terms popup
     $('#terms_trigger').click(function(e){
         e.preventDefault();
         var $popup = $('#terms_popup');
@@ -539,7 +523,6 @@ $(document).ready(function(){
         $('#terms_popup').slideUp(180);
     });
 
-    // Close popup if user clicks outside of it
     $(document).on('click', function(e){
         if (
             !$(e.target).closest('#terms_popup').length &&
