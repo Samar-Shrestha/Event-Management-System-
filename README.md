@@ -70,7 +70,7 @@ Venues are sorted by their combined score and displayed as **"Recommended for Yo
 ## 👤 Author
 
 **Samar Shrestha**
-- LinkedIn: [linkedin.com/in/your-profile](https://linkedin.com/in/your-profile)
+- LinkedIn: [linkedin.com/in/your-profile](www.linkedin.com/in/samar-shrestha-512101249)
 - GitHub: [github.com/Samar-Shrestha](https://github.com/Samar-Shrestha)
 - Email: shresthasamar76@gmail.com
 
